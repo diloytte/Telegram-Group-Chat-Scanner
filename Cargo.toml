@@ -1,0 +1,16 @@
+[package]
+name = "telegram_group_mirror"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenv = "0.15.0"
+grammers-client = "0.7.0"
+grammers-session = "0.7.0"
+regex = "1.11.1"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+tokio = { version = "1.44.1", features = ["full"] }
+
+[dev-dependencies]
+tempfile = "3.3"
