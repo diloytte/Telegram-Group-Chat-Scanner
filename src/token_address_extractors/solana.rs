@@ -5,7 +5,6 @@ pub fn extract_solana_address(text: &str) -> Option<String> {
     pattern.find(text).map(|m| m.as_str().to_string())
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

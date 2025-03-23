@@ -1,14 +1,13 @@
 use grammers_client::Client;
 use grammers_client::types::chat::Chat;
 
-pub async fn get_all_chats(client: &Client) -> Result<Vec<Chat>, Box<dyn std::error::Error>> {
-    println!("Fetching all chats...");
+use crate::print_dialog_data::print_dialog_info;
 
+pub async fn get_all_chats(client: &Client) -> Result<Vec<Chat>, Box<dyn std::error::Error>> {
     let mut chat_list: Vec<Chat> = Vec::new();
     let mut iter = client.iter_dialogs();
 
-    //TODO: Unwrap
-    let chats_total = iter.total().await.unwrap();
+    let chats_total = iter.total().await.unwrap_or_default();
 
     let iter_count = chats_total;
 
@@ -17,13 +16,7 @@ pub async fn get_all_chats(client: &Client) -> Result<Vec<Chat>, Box<dyn std::er
         match next_dialog_result {
             Ok(next_dialog_option) => match next_dialog_option {
                 Some(next_dialog) => {
-                    // let dialog_id = next_dialog.chat.id();
-                    // let dialog_name = next_dialog.chat.name();
-                    // let dialog_username = next_dialog.chat.username().unwrap_or("NO_USERNAME");
-                    // println!("Dialog ID: {}", dialog_id);
-                    // println!("Dialog Name: {}", dialog_name);
-                    // println!("Dialog Username: {}", dialog_username);
-                    // println!("-----------------------------------------");
+                    // print_dialog_info(&next_dialog.chat);
                     chat_list.push(next_dialog.chat);
                 }
                 None => println!("Dialog is None."),
