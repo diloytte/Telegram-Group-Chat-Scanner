@@ -1,25 +1,25 @@
-name: Rust Build
+name: build
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up Rust
-      uses: actions/setup-rust@v1.0.0
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
       with:
-        rust-version: 1.58
+        profile: minimal
+        toolchain: stable
+        override: true
 
-    - name: Build project
-      run: cargo build --release
+    - name: Build app
+      run: |
+        cargo build --verbose --release
