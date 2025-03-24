@@ -1,7 +1,7 @@
 use grammers_client::Client;
 use grammers_client::types::chat::Chat;
 
-use crate::print_dialog_data::print_dialog_info;
+// use crate::print_dialog_data::print_dialog_info;
 
 pub async fn get_all_chats(client: &Client) -> Result<Vec<Chat>, Box<dyn std::error::Error>> {
     let mut chat_list: Vec<Chat> = Vec::new();

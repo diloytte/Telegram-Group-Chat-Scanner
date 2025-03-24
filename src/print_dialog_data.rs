@@ -1,5 +1,6 @@
 use grammers_client::types::chat::Chat;
 
+#[allow(dead_code)]
 pub fn print_dialog_info(dialog: &Chat) {
     let dialog_id = dialog.id();
     let dialog_name = dialog.name();
