@@ -6,6 +6,8 @@ mod ethereum;
 mod solana;
 mod tron;
 
+//TODO: These do not full extract ERC20/SPL token address. It just extracts the "address". Fix required.
+
 static FUNCTIONS: &[fn(&str) -> Option<String>] = &[
     extract_ethereum_address,
     extract_solana_address,
