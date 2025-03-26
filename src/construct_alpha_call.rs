@@ -6,7 +6,7 @@ use crate::{
 };
 
 pub fn construct_alpha_call(message: &Message) -> Option<String> {
-    let chat_data = extract_chat_data_from_message(&message);
+    let chat_data = extract_chat_data_from_message(message);
 
     let mut token_address_final: Option<String> = None;
 

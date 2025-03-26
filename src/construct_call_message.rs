@@ -36,5 +36,5 @@ pub fn construct_call_message(message: &Message) -> Option<String> {
         return Some(final_message);
     }
 
-    return None;
+    None
 }

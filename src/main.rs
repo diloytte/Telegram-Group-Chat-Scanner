@@ -14,7 +14,6 @@ mod send_message;
 mod token_address_extractors;
 
 use dotenv::dotenv;
-use extract_data_by_username::extract_data_by_username;
 use find_chat::find_chat;
 use get_chats::get_all_chats;
 use grammers_client::types::Chat;
