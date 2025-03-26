@@ -5,28 +5,26 @@ use crate::{
     token_address_extractors::extract_token_address_from_message_text,
 };
 
+use std::collections::HashMap;
+
 pub fn construct_alpha_call(message: &Message) -> Option<String> {
     let chat_data = extract_chat_data_from_message(message);
-
-    let mut token_address_final: Option<String> = None;
-
-    //1058417098 sap
-    //5365945926 ay
-    //6682636432 psy
-    //7690346837 dil
-    //2361478254 dil tr
-    //2049696512 mil ge
-
-    let accepted_ids: Vec<i64> = vec![
-        1058417098, 5365945926, 6682636432, 7690346837, 2361478254, 2049696512,
-    ];
     let chat_id = chat_data.2;
-    if accepted_ids.contains(&chat_id) {
-        println!("alpha caller detected");
+
+    //TODO: Not efficient, but currently only for testing purposes untill structured otherwise.
+    let mut id_to_label: HashMap<i64, &str> = HashMap::new();
+    id_to_label.insert(1058417098, "sap");
+    id_to_label.insert(5365945926, "ay");
+    id_to_label.insert(6682636432, "psy");
+    id_to_label.insert(7690346837, "dil");
+    id_to_label.insert(2361478254, "dil tr");
+    id_to_label.insert(2049696512, "mil ge");
+
+    if let Some(label) = id_to_label.get(&chat_id) {
         if let Some(token_address) = extract_token_address_from_message_text(message.text()) {
-            token_address_final = Some(token_address);
+            return Some(format!("{}\n-------------------\n{}", label, token_address));
         }
     }
 
-    token_address_final
+    None
 }
