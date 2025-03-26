@@ -1,25 +1,25 @@
-mod find_chat;
-mod get_chats;
-mod construct_mirror_message;
-mod construct_call_message;
-mod new_message_listener;
-mod print_dialog_data;
-mod token_address_extractors;
-mod send_message;
-mod mark_all_chats_as_read;
 mod buy_ca;
 mod construct_alpha_call;
-mod extract_chat_data;
+mod construct_call_message;
+mod construct_mirror_message;
 mod download_chat_photo;
+mod extract_chat_data;
 mod extract_data_by_username;
+mod find_chat;
+mod get_chats;
+mod mark_all_chats_as_read;
+mod new_message_listener;
+mod print_dialog_data;
+mod send_message;
+mod token_address_extractors;
 
 use dotenv::dotenv;
 use extract_data_by_username::extract_data_by_username;
 use find_chat::find_chat;
 use get_chats::get_all_chats;
+use grammers_client::types::Chat;
 use grammers_client::{Client, Config, SignInError};
 use grammers_session::Session;
-use grammers_client::types::Chat;
 // use mark_all_chats_as_read::mark_all_chats_as_read;
 use new_message_listener::listen_for_updates;
 use std::env;
@@ -80,23 +80,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let chats = get_all_chats(&client).await?;
 
-    let alpha_chat = find_chat(chats.clone(),"Alpha").await.unwrap().unwrap();
+    let alpha_chat = find_chat(chats.clone(), "Alpha").await.unwrap().unwrap();
 
-    let calls_chat = find_chat(chats.clone(), "4733825356").await.unwrap().unwrap();
+    let calls_chat = find_chat(chats.clone(), "4733825356")
+        .await
+        .unwrap()
+        .unwrap();
 
     let from_chat = find_chat(chats.clone(), "1981115066")
         .await
         .unwrap()
         .unwrap();
-    let to_chat = find_chat(chats.clone(), "PP Forwards").await.unwrap().unwrap();
+    let to_chat = find_chat(chats.clone(), "PP Forwards")
+        .await
+        .unwrap()
+        .unwrap();
 
     let mirror_gc_data: GroupchatsData = GroupchatsData {
-        mirror_from_chat:from_chat,
-         mirror_to_chat:to_chat,
-         calls_chat,
-         alpha_chat
-        };
-        
+        mirror_from_chat: from_chat,
+        mirror_to_chat: to_chat,
+        calls_chat,
+        alpha_chat,
+    };
+
     let _ = listen_for_updates(client, &mirror_gc_data).await;
 
     Ok(())

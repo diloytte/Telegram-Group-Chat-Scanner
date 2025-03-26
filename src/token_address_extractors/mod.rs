@@ -27,7 +27,7 @@ pub fn extract_token_address_from_message_text(text: &str) -> Option<String> {
             break;
         }
     }
-    
+
     final_token_address
 }
 

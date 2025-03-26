@@ -1,6 +1,6 @@
-use grammers_client::types::Message;
 use crate::extract_chat_data::extract_chat_data_from_message;
 use crate::token_address_extractors::extract_token_address_from_message_text;
+use grammers_client::types::Message;
 
 pub fn construct_call_message(message: &Message) -> Option<String> {
     let _ = message.chat();
@@ -9,20 +9,14 @@ pub fn construct_call_message(message: &Message) -> Option<String> {
     if let Some(token_address) = token_address_option {
         let (sender_name, sender_username, sender_id) = extract_chat_data_from_message(message);
 
-
-        let accepted_ids:Vec<i64> = vec![
+        let accepted_ids: Vec<i64> = vec![
             6856832897, //Drn
             1046947851, //Rkt
             7377078796, //TNFLB
             5346291682, //De
             1160171995, //M
             //////////
-            1058417098,
-            5365945926,
-            6682636432,
-            7690346837,
-            2361478254,
-            2049696512,
+            1058417098, 5365945926, 6682636432, 7690346837, 2361478254, 2049696512,
         ];
 
         // 7178305557 phanes
@@ -44,4 +38,3 @@ pub fn construct_call_message(message: &Message) -> Option<String> {
 
     return None;
 }
-
