@@ -1,54 +1,47 @@
 use grammers_client::types::Message;
-use grammers_client::types::chat::Chat;
-
+use crate::extract_chat_data::extract_chat_data_from_message;
 use crate::token_address_extractors::extract_token_address_from_message_text;
 
 pub fn construct_call_message(message: &Message) -> Option<String> {
-    let from_chat = message.chat();
+    let _ = message.chat();
     let token_address_option = extract_token_address_from_message_text(message.text());
 
-    let mut sender_name = String::new();
-    let mut sender_username =String::new();
-    let mut sender_id = i64::default();
-
     if let Some(token_address) = token_address_option {
-        if let Chat::User(user) = from_chat {
-            // println!("USER");
-            // println!("{:?}",&user);
-            sender_name = user.full_name();
-            sender_username = match user.username() {
-                Some(username) => String::from(username),
-                None => String::from("NO_USERNAME"),
-            };
-            sender_id = user.id();
-        } else if let Chat::Channel(channel) = from_chat {
-            // println!("CHANNEL");
-            sender_name = channel.title().to_string();
-            sender_id = channel.id();
-        }else {
-            // println!("SENDER");
-            if let Some(sender) = message.sender() {
-                sender_username =  match sender.username() {
-                    Some(username) => String::from(username),
-                    None => String::from("NO_USERNAME"),
-                };
-                sender_name = sender.name().to_string();
-                sender_id = sender.id();
-            } else {
-                println!("No sender information found for this message.");
-            }    
+        let (sender_name, sender_username, sender_id) = extract_chat_data_from_message(message);
+
+
+        let accepted_ids:Vec<i64> = vec![
+            6856832897, //Drn
+            1046947851, //Rkt
+            7377078796, //TNFLB
+            5346291682, //De
+            1160171995, //M
+            //////////
+            1058417098,
+            5365945926,
+            6682636432,
+            7690346837,
+            2361478254,
+            2049696512,
+        ];
+
+        // 7178305557 phanes
+        // 6362041475 pirb
+        // 7774196337 phanes gold
+
+        // let ignored_ids: Vec<i64> = vec![7178305557, 6362041475,7774196337];
+
+        if !accepted_ids.contains(&sender_id) {
+            return None;
         }
 
-        // println!("{:?}", &sender_name);
-        // println!("{:?}", &sender_username);
-        // println!("{:?}", &sender_id);
-        // println!("---------------------------");
-        let final_message = format!("Name: {}\nUsername: {}\nID: {}\n--------------\n{}",
+        let final_message = format!(
+            "Name: {}\nUsername: {}\nID: {}\n--------------\n{}",
             sender_name, sender_username, sender_id, token_address
         );
         return Some(final_message);
     }
 
-
     return None;
 }
+

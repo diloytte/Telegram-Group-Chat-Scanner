@@ -8,7 +8,7 @@ mod tron;
 
 //TODO: These do not full extract ERC20/SPL token address. It just extracts the "address". Fix required.
 
-static FUNCTIONS: &[fn(&str) -> Option<String>] = &[
+pub static FUNCTIONS: &[fn(&str) -> Option<String>] = &[
     extract_ethereum_address,
     extract_solana_address,
     extract_tron_address,
@@ -16,7 +16,6 @@ static FUNCTIONS: &[fn(&str) -> Option<String>] = &[
 
 pub fn extract_token_address_from_message_text(text: &str) -> Option<String> {
     let mut final_token_address: Option<String> = None;
-
     let len = FUNCTIONS.iter().len();
 
     for i in 0..len {
