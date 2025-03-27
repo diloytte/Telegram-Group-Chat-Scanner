@@ -6,7 +6,7 @@ use std::{
 
 use grammers_client::types::Chat;
 use serde::{Deserialize, Serialize};
-use serde_json::{to_string, to_string_pretty};
+use serde_json::to_string_pretty;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatData {
@@ -39,12 +39,12 @@ pub fn extract_chat_data_from_chat(chat: &Chat) -> ChatData {
         chat_type = 2;
     }
 
-    return ChatData {
+    ChatData {
         name,
         username,
         id,
         chat_type,
-    };
+    }
 }
 
 pub fn extract_chats_data_from_chats(chats: Vec<Chat>) -> Vec<ChatData> {

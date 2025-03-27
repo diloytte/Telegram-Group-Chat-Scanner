@@ -18,18 +18,13 @@ mod token_address_extractors;
 
 use dotenv::dotenv;
 use extract_chat_data_from_chat::{extract_chats_data_from_chats, save_json_to_file};
-use extract_chat_data_from_message::extract_chat_data_from_message;
 use find_chat::find_chat;
 use get_chats::get_all_chats;
 use grammers_client::types::Chat;
 use grammers_client::{Client, Config, SignInError};
 use grammers_session::Session;
 // use mark_all_chats_as_read::mark_all_chats_as_read;
-use new_message_listener::listen_for_updates;
-use serde::{Deserialize, Serialize};
 use std::env;
-use std::fs::File;
-use std::io::{BufWriter, Write};
 use tokio::fs;
 
 pub struct GroupchatsData {
