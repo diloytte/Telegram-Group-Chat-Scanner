@@ -1,7 +1,7 @@
 use grammers_client::types::Message;
 
 use crate::{
-    extract_chat_data::extract_chat_data_from_message,
+    extract_chat_data_from_message::extract_chat_data_from_message,
     token_address_extractors::extract_token_address_from_message_text,
 };
 

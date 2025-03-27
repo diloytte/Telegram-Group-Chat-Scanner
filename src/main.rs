@@ -1,19 +1,24 @@
+mod buy_ca;
 mod construct_alpha_call;
 mod construct_call_message;
 mod construct_mirror_message;
 mod download_chat_photo;
-mod extract_chat_data;
+mod extract_chat_data_from_chat;
+mod extract_chat_data_from_message;
 mod extract_data_by_username;
 mod find_chat;
+mod forward_redacted_systems_bot_messages;
 mod get_chats;
 mod mark_all_chats_as_read;
 mod new_message_listener;
 mod print_dialog_data;
+mod react_to_message;
 mod send_message;
 mod token_address_extractors;
-mod forward_redacted_systems_bot_messages;
 
 use dotenv::dotenv;
+use extract_chat_data_from_chat::{extract_chats_data_from_chats, save_json_to_file};
+use extract_chat_data_from_message::extract_chat_data_from_message;
 use find_chat::find_chat;
 use get_chats::get_all_chats;
 use grammers_client::types::Chat;
@@ -21,7 +26,10 @@ use grammers_client::{Client, Config, SignInError};
 use grammers_session::Session;
 // use mark_all_chats_as_read::mark_all_chats_as_read;
 use new_message_listener::listen_for_updates;
+use serde::{Deserialize, Serialize};
 use std::env;
+use std::fs::File;
+use std::io::{BufWriter, Write};
 use tokio::fs;
 
 pub struct GroupchatsData {
@@ -30,7 +38,7 @@ pub struct GroupchatsData {
     pub calls_chat: Chat,
     pub alpha_chat: Chat,
     pub redacted_forwards_chat: Chat,
-    pub redacted_system_bot_chat:Chat,
+    pub redacted_system_bot_chat: Chat,
 }
 
 #[tokio::main]
@@ -94,7 +102,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?
         .unwrap();
 
-    let redacted_system_bot_chat = find_chat(chats.clone(),"Redacted Systems Bot").await?.unwrap();
+    let redacted_system_bot_chat = find_chat(chats.clone(), "Redacted Systems Bot")
+        .await?
+        .unwrap();
 
     let mirror_gc_data: GroupchatsData = GroupchatsData {
         mirror_from_chat: from_chat,
@@ -102,10 +112,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         calls_chat,
         alpha_chat,
         redacted_forwards_chat,
-        redacted_system_bot_chat
+        redacted_system_bot_chat,
     };
 
-    let _ = listen_for_updates(client, &mirror_gc_data).await;
+    let chats_data = extract_chats_data_from_chats(chats);
+
+    save_json_to_file(&chats_data, "./chats.json")?;
+
+    // let _ = listen_for_updates(client, &mirror_gc_data).await;
 
     Ok(())
 }

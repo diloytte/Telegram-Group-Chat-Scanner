@@ -1,4 +1,4 @@
-use crate::extract_chat_data::extract_chat_data_from_message;
+use crate::extract_chat_data_from_message::extract_chat_data_from_message;
 use crate::token_address_extractors::extract_token_address_from_message_text;
 use grammers_client::types::Message;
 
@@ -7,8 +7,9 @@ pub fn construct_call_message(message: &Message) -> Option<String> {
     let token_address_option = extract_token_address_from_message_text(message.text());
 
     if let Some(token_address) = token_address_option {
-        let (sender_name, sender_username, sender_id) = extract_chat_data_from_message(message);
+        let (sender_name, sender_username, sender_id, _) = extract_chat_data_from_message(message);
 
+        //TODO: These kind of ID's needs to be fixed and be left in memory.
         let accepted_ids: Vec<i64> = vec![
             6856832897, //Drn
             1046947851, //Rkt

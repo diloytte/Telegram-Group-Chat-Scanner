@@ -1,5 +1,8 @@
 use crate::{
-    construct_alpha_call::construct_alpha_call, construct_call_message::construct_call_message, construct_mirror_message::constuct_mirror_msg, forward_redacted_systems_bot_messages::forward_redacted_systems_bot_message, send_message::send_telegram_message, GroupchatsData
+    GroupchatsData, construct_alpha_call::construct_alpha_call,
+    construct_call_message::construct_call_message, construct_mirror_message::constuct_mirror_msg,
+    forward_redacted_systems_bot_messages::forward_redacted_systems_bot_message,
+    send_message::send_telegram_message,
 };
 use grammers_client::{Client, Update};
 use std::error;
@@ -31,12 +34,14 @@ async fn process_message(
 
     let _ = forward_redacted_systems_bot_message(client, gc_data, message).await;
 
+    let chat_id = message.chat().id();
+
     // Mirror message logic
-    // if gc_data.mirror_from_chat.id() == chat_id {
-    //     if let Some(formatted_message) = constuct_mirror_msg(message) {
-    //         send_telegram_message(client, &gc_data.mirror_to_chat, &formatted_message).await;
-    //     }
-    // }
+    if gc_data.mirror_from_chat.id() == chat_id {
+        if let Some(formatted_message) = constuct_mirror_msg(message) {
+            send_telegram_message(client, &gc_data.mirror_to_chat, &formatted_message).await;
+        }
+    }
 
     // Call message logic
     if let Some(call_message) = construct_call_message(message) {
