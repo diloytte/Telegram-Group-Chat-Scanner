@@ -52,4 +52,13 @@ mod tests {
         let result = extract_solana_address(input);
         assert_eq!(result, expected_address);
     }
+
+    #[test]
+    fn test_link() {
+        let input = "https://dexscreener.com/solana/6UeL7hzjCzKBqKap8vtay6SfCaCkQAUpidTWayrwpump";
+        let expected_address = Some("6UeL7hzjCzKBqKap8vtay6SfCaCkQAUpidTWayrwpump".to_string());
+
+        let result = extract_solana_address(input);
+        assert_eq!(expected_address, result);
+    }
 }

@@ -45,4 +45,14 @@ mod tests {
         let result = extract_tron_address(input);
         assert_eq!(result, expected_address);
     }
+
+    #[test]
+
+    fn test_link() {
+        let input = "https://dexscreener.com/tron/TDECSYjDTLFVRtNHeydKkKJq6kXU9hHDex";
+        let expected_address = Some("TDECSYjDTLFVRtNHeydKkKJq6kXU9hHDex".to_string());
+
+        let result = extract_tron_address(input);
+        assert_eq!(expected_address, result);
+    }
 }

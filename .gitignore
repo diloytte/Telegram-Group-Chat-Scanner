@@ -2,4 +2,4 @@
 .env
 session.session
 /photos
-user_data.json
+*.json

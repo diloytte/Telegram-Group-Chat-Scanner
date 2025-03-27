@@ -33,6 +33,15 @@ mod tests {
     }
 
     #[test]
+    fn test_link() {
+        let input = "https://dexscreener.com/bsc/0x2c46eb9820f048eeba1ce7b1dcfd302916284dad";
+        let expected_address = Some("0x2c46eb9820f048eeba1ce7b1dcfd302916284dad".to_string());
+
+        let result = extract_ethereum_address(input);
+        assert_eq!(expected_address, result);
+    }
+
+    #[test]
     fn test_multiple_addresses() {
         let input = "
             0xAb5801a7D398351b8bE11C439e05C5b3259aec9B
