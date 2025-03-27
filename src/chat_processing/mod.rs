@@ -6,6 +6,5 @@ mod get_chats;
 
 pub use extract_chat_data_from_chat::*;
 pub use extract_chat_data_from_message::*;
-pub use extract_data_by_username::*;
 pub use find_chat::*;
 pub use get_chats::*;

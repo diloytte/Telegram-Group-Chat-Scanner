@@ -1,10 +1,13 @@
-mod message_processing;
 mod chat_processing;
+mod message_processing;
 mod new_message_listener;
 mod token_address_extractors;
 mod utils;
 
-use chat_processing::{extract_chats_data_from_chats, find_chat, get_all_chats, load_chat_ids_from_json_file, save_json_to_file};
+use chat_processing::{
+    extract_chats_data_from_chats, find_chat, get_all_chats, load_chat_ids_from_json_file,
+    save_json_to_file,
+};
 use dotenv::dotenv;
 use grammers_client::types::Chat;
 use grammers_client::{Client, Config, SignInError};
@@ -41,7 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::connect(Config {
         session,
         api_id,
-        api_hash: api_hash,
+        api_hash,
         params: Default::default(),
     })
     .await?;
@@ -78,13 +81,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let from_chat = find_chat(&chats, "1981115066").await?.unwrap();
     let to_chat = find_chat(&chats, "PP Forwards").await?.unwrap();
 
-    let redacted_forwards_chat = find_chat(&chats, "Redacted Forwards")
-        .await?
-        .unwrap();
+    let redacted_forwards_chat = find_chat(&chats, "Redacted Forwards").await?.unwrap();
 
-    let redacted_system_bot_chat = find_chat(&chats, "Redacted Systems Bot")
-        .await?
-        .unwrap();
+    let redacted_system_bot_chat = find_chat(&chats, "Redacted Systems Bot").await?.unwrap();
 
     let mirror_gc_data: GroupchatsData = GroupchatsData {
         mirror_from_chat: from_chat,
@@ -101,7 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let data = load_chat_ids_from_json_file("bot_chat_ids.json")?;
 
-    let _ = listen_for_updates (client, &mirror_gc_data).await;
+    let _ = listen_for_updates(client, &mirror_gc_data).await;
 
     Ok(())
 }

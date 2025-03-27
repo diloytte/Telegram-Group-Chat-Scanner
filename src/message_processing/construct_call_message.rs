@@ -1,4 +1,7 @@
-use crate::{chat_processing::extract_chat_data_from_message, token_address_extractors::extract_token_address_from_message_text};
+use crate::{
+    chat_processing::extract_chat_data_from_message,
+    token_address_extractors::extract_token_address_from_message_text,
+};
 use grammers_client::types::Message;
 
 pub fn construct_call_message(message: &Message) -> Option<String> {
