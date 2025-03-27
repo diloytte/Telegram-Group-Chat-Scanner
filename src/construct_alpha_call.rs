@@ -16,8 +16,8 @@ pub fn construct_alpha_call(message: &Message) -> Option<String> {
     id_to_label.insert(1058417098, "sap");
     id_to_label.insert(5365945926, "ay");
     id_to_label.insert(6682636432, "psy");
-    id_to_label.insert(7690346837, "dil");
-    id_to_label.insert(2361478254, "dil tr");
+    // id_to_label.insert(7690346837, "dil");
+    // id_to_label.insert(2361478254, "dil tr");
     id_to_label.insert(2049696512, "mil ge");
 
     if let Some(label) = id_to_label.get(&chat_id) {
