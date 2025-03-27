@@ -1,28 +1,15 @@
-mod buy_ca;
-mod construct_alpha_call;
-mod construct_call_message;
-mod construct_mirror_message;
-mod download_chat_photo;
-mod extract_chat_data_from_chat;
-mod extract_chat_data_from_message;
-mod extract_data_by_username;
-mod find_chat;
-mod forward_redacted_systems_bot_messages;
-mod get_chats;
-mod mark_all_chats_as_read;
+mod message_processing;
+mod chat_processing;
 mod new_message_listener;
-mod print_dialog_data;
-mod react_to_message;
-mod send_message;
 mod token_address_extractors;
+mod utils;
 
+use chat_processing::{extract_chats_data_from_chats, find_chat, get_all_chats, load_chat_ids_from_json_file, save_json_to_file};
 use dotenv::dotenv;
-use extract_chat_data_from_chat::{extract_chats_data_from_chats, save_json_to_file};
-use find_chat::find_chat;
-use get_chats::get_all_chats;
 use grammers_client::types::Chat;
 use grammers_client::{Client, Config, SignInError};
 use grammers_session::Session;
+use new_message_listener::listen_for_updates;
 // use mark_all_chats_as_read::mark_all_chats_as_read;
 use std::env;
 use tokio::fs;
@@ -54,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::connect(Config {
         session,
         api_id,
-        api_hash: api_hash.clone(),
+        api_hash: api_hash,
         params: Default::default(),
     })
     .await?;
@@ -84,20 +71,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let chats = get_all_chats(&client).await?;
 
-    //TODO: Fix all this cloning...
+    let alpha_chat = find_chat(&chats, "Alpha").await?.unwrap();
 
-    let alpha_chat = find_chat(chats.clone(), "Alpha").await?.unwrap();
+    let calls_chat = find_chat(&chats, "4733825356").await?.unwrap();
 
-    let calls_chat = find_chat(chats.clone(), "4733825356").await?.unwrap();
+    let from_chat = find_chat(&chats, "1981115066").await?.unwrap();
+    let to_chat = find_chat(&chats, "PP Forwards").await?.unwrap();
 
-    let from_chat = find_chat(chats.clone(), "1981115066").await?.unwrap();
-    let to_chat = find_chat(chats.clone(), "PP Forwards").await?.unwrap();
-
-    let redacted_forwards_chat = find_chat(chats.clone(), "Redacted Forwards")
+    let redacted_forwards_chat = find_chat(&chats, "Redacted Forwards")
         .await?
         .unwrap();
 
-    let redacted_system_bot_chat = find_chat(chats.clone(), "Redacted Systems Bot")
+    let redacted_system_bot_chat = find_chat(&chats, "Redacted Systems Bot")
         .await?
         .unwrap();
 
@@ -114,7 +99,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     save_json_to_file(&chats_data, "./chats.json")?;
 
-    // let _ = listen_for_updates(client, &mirror_gc_data).await;
+    let data = load_chat_ids_from_json_file("bot_chat_ids.json")?;
+
+    let _ = listen_for_updates (client, &mirror_gc_data).await;
 
     Ok(())
 }

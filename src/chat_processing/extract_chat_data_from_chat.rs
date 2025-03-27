@@ -1,7 +1,5 @@
 use std::{
-    fs::File,
-    io::{BufWriter, Write},
-    os::unix::ffi::OsStrExt,
+    collections::HashMap, fs::File, io::{read_to_string, BufReader, BufWriter, Write}, os::unix::ffi::OsStrExt
 };
 
 use grammers_client::types::Chat;
@@ -57,7 +55,7 @@ pub fn extract_chats_data_from_chats(chats: Vec<Chat>) -> Vec<ChatData> {
     data_array
 }
 
-pub fn save_json_to_file<T>(json_data: &T, filename: &str) -> Result<(), Box<dyn std::error::Error>>
+pub fn save_json_to_file<T>(json_data: &T, filename: &str) -> Result<(),std::io::Error>
 where
     T: Serialize,
 {
@@ -67,4 +65,18 @@ where
     writer.write_all(json_string.as_bytes())?;
     writer.flush()?;
     Ok(())
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ChatSimplified {
+    name: String,  // This field is a String in JSON
+    id: i64,       // This field is an i64 in JSON
+}
+
+pub fn load_chat_ids_from_json_file(filepath:&str)->Result<Vec<ChatSimplified>,std::io::Error>{
+    let file = File::open(filepath)?;
+    let reader = BufReader::new(file);
+    let json:Vec<ChatSimplified> = serde_json::from_reader(reader)?;
+    dbg!(&json);
+    Ok(json)
 }

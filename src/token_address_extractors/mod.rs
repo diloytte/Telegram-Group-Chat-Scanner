@@ -1,15 +1,16 @@
-use ethereum::extract_ethereum_address;
-use solana::extract_solana_address;
-use tron::extract_tron_address;
 
-mod ethereum;
+mod ethereum_based;
 mod solana;
 mod tron;
+
+use ethereum_based::extract_ethereum_based_address;
+use solana::extract_solana_address;
+use tron::extract_tron_address;
 
 //TODO: These do not full extract ERC20/SPL token address. It just extracts the "address". Fix required.
 
 pub static FUNCTIONS: &[fn(&str) -> Option<String>] = &[
-    extract_ethereum_address,
+    extract_ethereum_based_address,
     extract_solana_address,
     extract_tron_address,
 ];

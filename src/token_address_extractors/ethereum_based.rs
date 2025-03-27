@@ -1,6 +1,6 @@
 use regex::Regex;
 
-pub fn extract_ethereum_address(text: &str) -> Option<String> {
+pub fn extract_ethereum_based_address(text: &str) -> Option<String> {
     let pattern = Regex::new(r"\b0x[a-fA-F0-9]{40}\b").unwrap();
     pattern.find(text).map(|m| m.as_str().to_string())
 }
@@ -19,7 +19,7 @@ mod tests {
 
         let expected_address = Some("0xAb5801a7D398351b8bE11C439e05C5b3259aec9B".to_string());
 
-        let result = extract_ethereum_address(input);
+        let result = extract_ethereum_based_address(input);
         assert_eq!(result, expected_address);
     }
 
@@ -28,7 +28,7 @@ mod tests {
         let input = "This is a test with no valid Ethereum addresses!";
         let expected_address = None;
 
-        let result = extract_ethereum_address(input);
+        let result = extract_ethereum_based_address(input);
         assert_eq!(result, expected_address);
     }
 
@@ -37,7 +37,7 @@ mod tests {
         let input = "https://dexscreener.com/bsc/0x2c46eb9820f048eeba1ce7b1dcfd302916284dad";
         let expected_address = Some("0x2c46eb9820f048eeba1ce7b1dcfd302916284dad".to_string());
 
-        let result = extract_ethereum_address(input);
+        let result = extract_ethereum_based_address(input);
         assert_eq!(expected_address, result);
     }
 
@@ -51,7 +51,7 @@ mod tests {
         // The function should return only the first valid Ethereum address found.
         let expected_address = Some("0xAb5801a7D398351b8bE11C439e05C5b3259aec9B".to_string());
 
-        let result = extract_ethereum_address(input);
+        let result = extract_ethereum_based_address(input);
         assert_eq!(result, expected_address);
     }
 }
